@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v2
         with:
           ref: ${{ github.ref }}
-        token: ${{ secrets.PAT }}
+          token: ${{ secrets.PAT }}
 
       - name: Write ref to file
         run: git rev-list -n 1 $GITHUB_REF > ./git_commit
