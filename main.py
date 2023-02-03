@@ -4,7 +4,6 @@ from typing import Optional
 import discord
 from discord import app_commands
 
-
 MY_GUILD = discord.Object(id=458765854624972811)  # replace with your guild id
 
 
@@ -69,7 +68,8 @@ async def send(interaction: discord.Interaction, text_to_send: str):
 # To make an argument optional, you can either give it a supported default argument
 # or you can mark it as Optional from the typing standard library. This example does both.
 @client.tree.command()
-@app_commands.describe(member='The member you want to get the joined date from; defaults to the user who uses the command')
+@app_commands.describe(
+    member='The member you want to get the joined date from; defaults to the user who uses the command')
 async def joined(interaction: discord.Interaction, member: Optional[discord.Member] = None):
     """Says when a member joined."""
     # If no member is explicitly provided then we use the command user here
