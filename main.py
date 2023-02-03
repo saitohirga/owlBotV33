@@ -1,3 +1,4 @@
+import key
 from typing import Optional
 
 import discord
@@ -113,4 +114,4 @@ async def report_message(interaction: discord.Interaction, message: discord.Mess
     await log_channel.send(embed=embed, view=url_view)
 
 
-client.run('NDkwOTg3NzU4NDc5OTk4OTg2.G9oQ2O.2BrcgzzrAObpe4gcBFS5XfCLFujpD5FLZeWYuE')
+client.run(key.token)
