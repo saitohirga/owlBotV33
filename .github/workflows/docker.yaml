@@ -70,12 +70,3 @@ jobs:
 
           [[ "$VERSION" != "dev" ]] && docker push $IMAGE_ID:latest || true
           docker push $IMAGE_ID:$VERSION
-
-      - name: Deploy official images
-        id: deploy_images
-        uses: satak/webrequest-action@v1
-        with:
-          url: ${{ secrets.DEPLOY_URL }}
-          method: POST
-          headers: '{"Authentication": "Token ${{ secrets.DEPLOY_TOKEN }}"}'
-          payload: '{"version": "${{ env.version }}"}'
