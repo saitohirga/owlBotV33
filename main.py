@@ -1,4 +1,4 @@
-import key
+import data.key
 from typing import Optional
 
 import discord
@@ -103,4 +103,4 @@ async def report_message(interaction: discord.Interaction, message: discord.Mess
     await log_channel.send(embed=embed, view=url_view)
 
 
-client.run(key.token)
+client.run(data.key.token)
