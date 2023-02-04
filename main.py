@@ -8,6 +8,7 @@ bot = discord.Bot()
 
 @bot.slash_command()
 async def rat(ctx, name: str = None):
+    """Checks for that gosh darn rat!"""
     name = name or ctx.author.name
     datetimeFormat = '%Y-%m-%d %H:%M:%S'
     date2 = '2019-11-18 12:25:34'
@@ -17,8 +18,17 @@ async def rat(ctx, name: str = None):
                       f"last seen {diff}")
 
 
-#@bot.user_command(name="Say Hello")
-#async def hi(ctx, user):
+@client.message()
+async def oof(message: discord.Message):
+    if message.content.lower().endswith("ara ara"):
+        try:
+            await message.channel.send("http://giphygifs.s3.amazonaws.com/media/4SSj1rY2T1Eju/giphy.gif")
+        except:
+            pass
+
+
+# @bot.user_command(name="Say Hello")
+# async def hi(ctx, user):
 #    await ctx.respond(f"{ctx.author.mention} says hello to {user.name}!")
 
 
