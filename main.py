@@ -2,6 +2,8 @@ import data.key
 from typing import Optional
 
 import discord
+import datetime
+from time import gmtime, strftime
 from discord import app_commands
 
 MY_GUILD = discord.Object(id=458765854624972811)  # replace with your guild id
@@ -43,16 +45,16 @@ async def hello(interaction: discord.Interaction):
     """Says hello!"""
     await interaction.response.send_message(f'Hi, {interaction.user.mention}')
 
-
 @client.tree.command()
-@app_commands.describe(
-    first_value='The first value you want to add something to',
-    second_value='The value you want to add to the first value',
-)
-async def add(interaction: discord.Interaction, first_value: int, second_value: int):
-    """Adds two numbers together."""
-    await interaction.response.send_message(f'{first_value} + {second_value} = {first_value + second_value}')
+async def rat(interaction: discord.Interaction):
+    """RAT!"""
+    datetimeFormat = '%Y-%m-%d %H:%M:%S'
+    date2 = '2019-11-18 12:25:34'
+    date1 = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    diff = datetime.datetime.strptime(date1, datetimeFormat) - datetime.datetime.strptime(date2, datetimeFormat)
 
+    await interaction.response.send_message(f"Hi, {interaction.user.mention},No rats spotted in the caf as of today, "
+                                            f"if this changes DM Saito, time since last seen {diff} ")
 
 # To make an argument optional, you can either give it a supported default argument
 # or you can mark it as Optional from the typing standard library. This example does both.
