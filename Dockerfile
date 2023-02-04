@@ -4,3 +4,4 @@ COPY . /app
 WORKDIR /app
 
 CMD ["pwd"]
+CMD ["ls"]
