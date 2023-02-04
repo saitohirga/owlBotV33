@@ -1,6 +1,34 @@
-FROM gorialis/discord.py:buster-master-extras
+FROM ghcr.io/void-linux/void-linux:latest-full-x86_64-musl
+
+
 
 COPY . /app
 WORKDIR /app
 
-CMD ["python3", "main.py"]
+ARG REPOSITORY=https://repo-us.voidlinux.org/current
+
+ARG UID 1000
+ARG GID 1000
+
+RUN \
+    echo "**** update system ****" && \
+    xbps-install -Suy xbps -R ${REPOSITORY} && \
+    xbps-install -uy -R ${REPOSITORY} && \
+    echo "**** install system packages ****" && \
+    xbps-install -y -R ${REPOSITORY} ${PKGS} python3 python3-pip && \
+    echo "**** install pip packages ****" && \
+    pip3 install -U pip setuptools wheel && \
+    pip3 install -r requirements.txt && \
+    echo "**** clean up ****" && \
+    rm -rf \
+        /root/.cache \
+        /tmp/* \
+        /var/cache/xbps/*
+
+ENV PYTHON_BIN python3
+ENV PYTHONUNBUFFERED 1
+
+USER $UID:$GID
+
+CMD ["/bin/sh", "run.sh", "--pass-errors", "--no-botenv"]
+
