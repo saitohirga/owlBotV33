@@ -59,7 +59,7 @@ async def info(ctx: discord.ApplicationContext, user: discord.Member = None):
 
 @bot.slash_command(name="echo")
 @discord.default_permissions(
-    manage_messages=True, )
+    manage_messages=True)
 async def global_command(
         ctx: discord.ApplicationContext, var: ""
 ):
