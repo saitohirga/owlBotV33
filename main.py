@@ -57,13 +57,13 @@ async def info(ctx: discord.ApplicationContext, user: discord.Member = None):
     await ctx.respond(embeds=[embed])  # Sends the embed
 
 
-@bot.slash_command(name="echo")
-@discord.default_permissions(
-    manage_messages=True)
-async def global_command(
-        ctx: discord.ApplicationContext, var: ""
-):
-    await ctx.respond(f"{var}")
+# @bot.slash_command(name="echo")
+# @discord.default_permissions(
+#    manage_messages=True)
+# async def global_command(
+#        ctx: discord.ApplicationContext, var: ""
+# ):
+#   await ctx.respond(f"{var}")
 
 
 bot.run(data.key.token)
