@@ -24,10 +24,10 @@ async def rat(ctx):
 
 @bot.slash_command(name="userinfo", description="Gets info about a user.")
 @discord.default_permissions(
-    manage_messages=True,)
+    manage_messages=True, )
 async def info(ctx: discord.ApplicationContext, user: discord.Member = None):
     user = (
-        user or ctx.author
+            user or ctx.author
     )  # If no user is provided it'll use the author of the message
     embed = discord.Embed(
         fields=[
@@ -55,5 +55,15 @@ async def info(ctx: discord.ApplicationContext, user: discord.Member = None):
         )  # When the user joined the server
 
     await ctx.respond(embeds=[embed])  # Sends the embed
+
+
+@bot.slash_command(name="echo")
+@discord.default_permissions(
+    manage_messages=True, )
+async def global_command(
+        ctx: discord.ApplicationContext, var: ""
+):
+    await ctx.respond(f"{var}")
+
 
 bot.run(data.key.token)
