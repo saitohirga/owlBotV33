@@ -1,5 +1,5 @@
 import lxml
-from Resources.Sitemap.Sitemap import SitemapLoader
+from Resources.sitemap.Sitemap import SitemapLoader
 from Utilities.Logging import autoLog
 """
 
