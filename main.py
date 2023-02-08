@@ -1,69 +1,64 @@
 import discord
 import data.key
-import datetime
-from time import gmtime, strftime
+import datetime, os
+from discord.ext import commands
+import asyncio
 
-bot = discord.Bot()
+"""
 
+    Refactored a significant amount just to future-proof it.
+    All Cogs are located in /Cogs, and are loaded into the client like client.load_extension('Cogs.Thing')
 
-@bot.slash_command()
-async def rat(ctx):
-    """Checks for that gosh darn rat!"""
-    name = name or ctx.author.name
-    datetimeFormat = '%Y-%m-%d %H:%M:%S'
-    date2 = '2019-11-18 12:25:34'
-    date1 = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-    diff = datetime.datetime.strptime(date1, datetimeFormat) - datetime.datetime.strptime(date2, datetimeFormat)
-    await ctx.respond(f"Hello {name}, No rats spotted in the caf as of today, if this changes DM Saito, time since "
-                      f"last seen {diff}")
+    Most common practice for python main files is the name/main conditional statement show below.
+    Not completely necessary but it's "proper"
 
+"""
 
-# @bot.user_command(name="Say Hello")
-# async def hi(ctx, user):
-#    await ctx.respond(f"{ctx.author.mention} says hello to {user.name}!")
+# pulls in all cogs in /Cogs and automatically registers them
+def load(client):
+    for filename in os.listdir("./Cogs"):
+        if filename.endswith(".py"):
+            client.load_extension(f"Cogs.{filename[:-3]}")
 
-@bot.slash_command(name="userinfo", description="Gets info about a user.")
-@discord.default_permissions(
-    manage_messages=True, )
-async def info(ctx: discord.ApplicationContext, user: discord.Member = None):
-    user = (
-            user or ctx.author
-    )  # If no user is provided it'll use the author of the message
-    embed = discord.Embed(
-        fields=[
-            discord.EmbedField(name="ID", value=str(user.id), inline=False),  # User ID
-            discord.EmbedField(
-                name="Created",
-                value=discord.utils.format_dt(user.created_at, "F"),
-                inline=False,
-            ),  # When the user's account was created
-        ],
-    )
-    embed.set_author(name=user.name)
-    embed.set_thumbnail(url=user.display_avatar.url)
+def main():
+    # god I hate discord's intent system shit, not because it exists, 
+    # but because every demo and documentation conveniently left it the fuck out
+    intents = discord.Intents.default()
+    intents.message_content = True
 
-    if user.colour.value:  # If user has a role with a color
-        embed.colour = user.colour
+    # see https://stackoverflow.com/questions/71369200/pycord-error-discord-errors-extensionfailed-extension-cogs-cmds-raised-an-er
+    client = commands.Bot(command_prefix='.', intents=intents) # had to be changed to commands.Bot from discord.Bot
+    load(client)
 
-    if isinstance(user, discord.User):  # Checks if the user in the server
-        embed.set_footer(text="This user is not in this server.")
-    else:  # We end up here if the user is a discord.Member object
-        embed.add_field(
-            name="Joined",
-            value=discord.utils.format_dt(user.joined_at, "F"),
-            inline=False,
-        )  # When the user joined the server
+    # does the thing
+    client.run(data.key.token)
 
-    await ctx.respond(embeds=[embed])  # Sends the embed
-
-
-# @bot.slash_command(name="echo")
-# @discord.default_permissions(
-#    manage_messages=True)
-# async def global_command(
-#        ctx: discord.ApplicationContext, var: ""
-# ):
-#   await ctx.respond(f"{var}")
-
-
-bot.run(data.key.token)
+if __name__ == "__main__":
+    # the machine wakes up
+    print('. ______________________________________________________________________________ .')
+    print('|.                                                                              .|')
+    print('| .&&&&*...........................&&&&&&&&&&..............................*&&&&.|')
+    print('|  ..&&&   #&&&&&&&&&&&&&&&&&&&&&&&%        &&&&&&&&&&&&&&&&&&&&&&&&&&&&/  &&&.. |')
+    print('|   ..&&&&                       &     &     &&&&        &&              (&&&..  |')
+    print('|    .%&&&&*          &&&&&&&&&.     &&&(    *&&&&      &&&&          &&&&#.     |')
+    print('|       ..&&&              &&&                 &&&       &&&&     %&&&&..        |')
+    print('|         .%&.      &&&&&&&&      &&&&&&&&,     &&&      &&&&&     ,&/.          |')
+    print('|       ..&&/    &%   &&&/       &&&&&&&&&&&       &&         &%     &&..        |')
+    print('|     ..&&      *&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&      *&&&..      |')
+    print('|    .&&,&&&&&&&&&&&&##%&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&###&&&&&&&&&&*& &%.     |')
+    print('|   .&&&&&&&&&&&&&&&&&&&######&&&&&&&&&&&&&&&&&&&&&######&&&&&&&&&&&&&&&&&&.     |')
+    print('|    .,&&..&&&&&&  &&&&&&&&&&&#####&&&&&&&&&&%#####&&&&&&&&&&&  &&&&&&.(&&.      |')
+    print('|       ..&&&&&(  &&&&...&&&&&&&&&&###&&&&%###&&&&&&&&&&...&&&&  %&&&&&..        |')
+    print('|       .%&&&&& ,&&&&&..&&&&&  &&&&&&&&#&#&&&&&&&&  &&&&(.,&&&%&  &&&&&(.        |')
+    print('|       ..&&&&&% &&&&&&&..&&&&&&&&..&&&&/&&&&..&&&&&&&&..&&&&&&& &&&&&&..        |')
+    print('|        ..(&&&&&   &&&&&&&&&&&&&&&&&&&&/..&&&&&&&&&&&&&&&&&&   &&&&&*..         |')
+    print('|           ..&&&&&&.    %&&&&&&&&&&&.&&/...&&&&&&&&&&&%    *&&&&&&..            |')
+    print('|              ...*&&&&&&&         &&&.&/..(&&         &&&&&&&....               |')
+    print('|                    .....&&&&&&&&&&&&&./.&&&&&&&&&&&&&.....                     |')
+    print('|                             ........&&&........                                |')
+    print('. ------------------------------------------------------------------------------ .')
+    print('LOGGING:')
+    print('=========')
+    
+    # thing that does the thing
+    main()
