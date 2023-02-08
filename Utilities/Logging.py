@@ -1,4 +1,5 @@
 from datetime import datetime
+import os
 # some sick colors 
 HEADER = '\033[95m'
 OKBLUE = '\033[94m'
@@ -24,8 +25,11 @@ intent_map = {
     'underline': UNDERLINE,
     None: ''
 }
+log_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sitemap.xml')
 
 # intent corresponds 1:1 with globals above
-def autoLog(message, intent=None):
+def autoLog(message, intent=None, log=False):
+    log_string = ""
     if isinstance(message, str) and ( isinstance(intent, str) or intent == None) :
-        print(f'{intent_map["white"]}[{datetime.now().strftime("%y-%m-%d@%H:%M:%S")}]{intent_map[intent]}[{message}]') 
+        log_string = f'{intent_map["white"]}[{datetime.now().strftime("%y-%m-%d@%H:%M:%S")}]{intent_map[intent]}[{message}][{"+" if log else " "}]{intent_map["endc"]}'
+        with open("bot_log.txt", "a+") as

@@ -12,7 +12,7 @@ class Status(commands.Cog):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        autoLog('Animal cog online', 'okgreen')
+        autoLog('Status cog online', 'okgreen')
 
     @commands.command()
     async def ping(self, ctx):
