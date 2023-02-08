@@ -25,11 +25,12 @@ intent_map = {
     'underline': UNDERLINE,
     None: ''
 }
-log_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sitemap.xml')
 
+# location = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sitemap.xml')
+# log_path = 
 # intent corresponds 1:1 with globals above
 def autoLog(message, intent=None, log=False):
     log_string = ""
     if isinstance(message, str) and ( isinstance(intent, str) or intent == None) :
         log_string = f'{intent_map["white"]}[{datetime.now().strftime("%y-%m-%d@%H:%M:%S")}]{intent_map[intent]}[{message}][{"+" if log else " "}]{intent_map["endc"]}'
-        with open("bot_log.txt", "a+") as
+        # with open("bot_log.txt", "a+") as

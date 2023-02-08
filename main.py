@@ -1,5 +1,5 @@
 import discord
-# import data.key
+import data.key
 import datetime, os
 from discord.ext import commands
 from Utilities.Logging import autoLog
@@ -39,7 +39,7 @@ def main():
     load(client)
 
     # does the thing
-    client.run('MTA3MTkyNDQ5MTIwNDE3Mzg4NA.GmtRNo.k2HC0J3sbYuUGrMBCF8erO2r3XGxP-SosMjyZg')
+    client.run(data.key.token)
 
 if __name__ == "__main__":
     # the machine wakes up
