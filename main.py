@@ -11,7 +11,7 @@ from Utilities.Logging import autoLog
     All Cogs are located in /Cogs, and are loaded into the client like client.load_extension('Cogs.Thing')
 
     Most common practice for python main files is the name/main conditional statement show below.
-    Not completely necessary but it's "proper"
+    Not completely necessary but it's "proper" and I am ALIVE!
 
     ----
     There is also a logger function to help maintain readable but verbose monitoring in terminal.
