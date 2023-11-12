@@ -1,4 +1,4 @@
-FROM python:slim
+FROM 3.9.18-bookworm
 
 COPY . /app
 WORKDIR /app
