@@ -11,7 +11,8 @@ RUN \
     apt-get install -y --no-install-recommends \
         libcairo2 \
         libjpeg62-turbo \
-        python-lxml \
+        libxml2-dev \
+        libxslt1-dev \
         && \
     echo "**** install pip packages ****" && \
     pip3 install -U pip setuptools wheel && \
