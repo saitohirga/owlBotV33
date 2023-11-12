@@ -1,19 +1,18 @@
-FROM ghcr.io/void-linux/void-linux:latest-full-x86_64-musl
+FROM python:slim
 
 COPY . /app
 WORKDIR /app
 
-ARG REPOSITORY=https://repo-us.voidlinux.org/current
-ARG PKGS="cairo libjpeg-turbo"
-ARG UID 1000
-ARG GID 1000
+ENV PYTHON_BIN python3
 
 RUN \
-    echo "**** update system ****" && \
-    xbps-install -Suy xbps -R ${REPOSITORY} && \
-    xbps-install -uy -R ${REPOSITORY} && \
-    echo "**** install system packages ****" && \
-    xbps-install -y -R ${REPOSITORY} ${PKGS} python3 python3-pip && \
+    apt-get update && \
+    echo "**** install runtime packages ****" && \
+    apt-get install -y --no-install-recommends \
+        libcairo2 \
+        libjpeg62-turbo \
+        python-lxml \
+        && \
     echo "**** install pip packages ****" && \
     pip3 install -U pip setuptools wheel && \
     pip3 install -r requirements.txt && \
@@ -21,11 +20,6 @@ RUN \
     rm -rf \
         /root/.cache \
         /tmp/* \
-        /var/cache/xbps/*
-
-ENV PYTHON_BIN python3
-ENV PYTHONUNBUFFERED 1
-
-USER $UID:$GID
+        /var/lib/apt/lists/*
 
 CMD ["/bin/sh", "run.sh", "--pass-errors", "--no-botenv"]
