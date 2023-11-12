@@ -1,3 +1,4 @@
 py-cord[voice]
-lxml
+libxml2-dev 
+libxslt1-dev
 requests
