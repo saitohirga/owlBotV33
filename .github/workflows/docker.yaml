@@ -28,7 +28,7 @@ jobs:
       - name: Build image
         id: build_image
         run: |
-          IMAGE_ID=saitohirga/owlslave
+          IMAGE_ID=saitohirga/owlBotV33
           IMAGE_NAME=${IMAGE_ID#*/}
           echo "image_id=$IMAGE_ID" >> $GITHUB_ENV
           echo "image_name=$IMAGE_NAME" >> $GITHUB_ENV
