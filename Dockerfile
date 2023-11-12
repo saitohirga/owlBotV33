@@ -9,8 +9,6 @@ RUN \
     apt-get update && \
     echo "**** install runtime packages ****" && \
     apt-get install -y --no-install-recommends \
-        libcairo2 \
-        libjpeg62-turbo \
         libxml2-dev \
         libxslt1-dev \
         && \
