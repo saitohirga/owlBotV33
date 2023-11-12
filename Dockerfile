@@ -1,12 +1,10 @@
 FROM ghcr.io/void-linux/void-linux:latest-full-x86_64-musl
 
-
-
 COPY . /app
 WORKDIR /app
 
 ARG REPOSITORY=https://repo-us.voidlinux.org/current
-
+ARG PKGS="cairo libjpeg-turbo"
 ARG UID 1000
 ARG GID 1000
 
@@ -31,4 +29,3 @@ ENV PYTHONUNBUFFERED 1
 USER $UID:$GID
 
 CMD ["/bin/sh", "run.sh", "--pass-errors", "--no-botenv"]
-
