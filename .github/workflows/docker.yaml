@@ -17,10 +17,9 @@ jobs:
       packages: write
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
         with:
           ref: ${{ github.ref }}
-          token: ${{ secrets.PAT }}
 
       - name: Write ref to file
         run: git rev-list -n 1 $GITHUB_REF > ./git_commit
@@ -28,7 +27,7 @@ jobs:
       - name: Build image
         id: build_image
         run: |
-          IMAGE_ID=saitohirga/owlslave
+          IMAGE_ID=${GITHUB_REPOSITORY,,}
           IMAGE_NAME=${IMAGE_ID#*/}
           echo "image_id=$IMAGE_ID" >> $GITHUB_ENV
           echo "image_name=$IMAGE_NAME" >> $GITHUB_ENV
@@ -39,7 +38,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.PAT }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Tag image
         id: tag_image
