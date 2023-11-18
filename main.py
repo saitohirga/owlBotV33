@@ -10,9 +10,9 @@ from discord.ext import commands
 MY_GUILD = discord.Object(id=458765854624972811)  # replace with your guild id
 
 
-class MyClient(discord.Client):
+class MyClient(commands.Bot):
     def __init__(self, *, intents: discord.Intents):
-        super().__init__(intents=intents)
+        super().__init__(command_prefix="!", intents=intents)
         self.tree = app_commands.CommandTree(self)
 
     
