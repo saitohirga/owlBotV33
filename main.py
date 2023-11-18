@@ -15,11 +15,9 @@ class MyClient(commands.Bot):
         super().__init__(command_prefix="!", intents=intents)
         self.tree = app_commands.CommandTree(self)
 
-    
     async def setup_hook(self):
         self.tree.copy_global_to(guild=MY_GUILD)
         await self.tree.sync(guild=MY_GUILD)
-
 
 intents = discord.Intents.default()
 client = MyClient(intents=intents)
