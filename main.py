@@ -13,10 +13,9 @@ MY_GUILD = discord.Object(id=458765854624972811)  # replace with your guild id
 class MyClient(commands.Bot):
     def __init__(self, *, intents: discord.Intents):
         super().__init__(command_prefix="!", intents=intents)
-        self.tree = app_commands.CommandTree(self)
 
     async def setup_hook(self):
-        self.tree.copy_global_to(guild=MY_GUILD)
+        # Sync the commands with the guild
         await self.tree.sync(guild=MY_GUILD)
 
 intents = discord.Intents.default()
