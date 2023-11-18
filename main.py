@@ -39,14 +39,10 @@ async def rat(interaction: discord.Interaction):
     await interaction.response.send_message(f"Hello  {interaction.user.mention}, No rats spotted in the caf as of today, if this changes DM Saito, time since " f"last seen {diff}")
 
 
-@discord.app_commands.command(description="Echoes the message to a specified channel")
-@discord.app_commands.describe(message="The message to echo")
-@discord.app_commands.describe(channel="The channel to send the message to")
-@discord.app_commands.choices(channel=[
-        discord.app_commands.Choice(name="Channel Name", value=458765855115968513)
-        # Add more channels as needed
-    ])
-async def secret_echo(self, interaction: discord.Interaction, message: str, channel: discord.TextChannel):
+    @discord.app_commands.command(description="Echoes the message to a specified channel")
+    @discord.app_commands.describe(message="The message to echo")
+    @discord.app_commands.describe(channel="The channel to send the message to")
+    async def secret_echo(self, interaction: discord.Interaction, message: str, channel: discord.TextChannel):
         role_id = 882444308857384991  # Your specific role ID
 
         # Check if the user has the required role
@@ -55,6 +51,7 @@ async def secret_echo(self, interaction: discord.Interaction, message: str, chan
             await interaction.response.send_message(f"Message sent to {channel.mention}", ephemeral=True)
         else:
             await interaction.response.send_message("You don't have permission to use this command.", ephemeral=True)
+
 
 
    
