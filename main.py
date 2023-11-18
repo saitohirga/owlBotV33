@@ -1,68 +1,40 @@
+from typing import Optional
+
 import discord
-import data.key
-import datetime, os
-from discord.ext import commands
-from Utilities.Logging import autoLog
+from discord import app_commands
+from time import gmtime, strftime
+import datetime
 
 
-"""
+MY_GUILD = discord.Object(id=458765854624972811)  # replace with your guild id
 
-    Refactored a significant amount just to future-proof it.
-    All Cogs are located in /Cogs, and are loaded into the client like client.load_extension('Cogs.Thing')
 
-    Most common practice for python main files is the name/main conditional statement show below.
-    Not completely necessary but it's "proper" and I am ALIVE!
+class MyClient(discord.Client):
+    def __init__(self, *, intents: discord.Intents):
+        super().__init__(intents=intents)
+        self.tree = app_commands.CommandTree(self)
 
-    ----
-    There is also a logger function to help maintain readable but verbose monitoring in terminal.
-    Check the import at the top
+    
+    async def setup_hook(self):
+        self.tree.copy_global_to(guild=MY_GUILD)
+        await self.tree.sync(guild=MY_GUILD)
 
-        autoLog(message, color-type)
 
-"""
+intents = discord.Intents.default()
+client = MyClient(intents=intents)
 
-# pulls in all cogs in /Cogs and automatically registers them
-def load(client):
-    for filename in os.listdir("./Cogs"):
-        if filename.endswith(".py"):
-            client.load_extension(f"Cogs.{filename[:-3]}")
+@client.event
+async def on_ready():
+    print(f'Logged in as {client.user} (ID: {client.user.id})')
+    print('------')
 
-def main():
-    autoLog('Revving up my tiny little motor...', 'bold')
-    # god I hate discord's intent system shit, not because it exists, 
-    # but because every demo and documentation conveniently left it the fuck out
-    intents = discord.Intents.default()
-    intents.message_content = True
-
-    # see https://stackoverflow.com/questions/71369200/pycord-error-discord-errors-extensionfailed-extension-cogs-cmds-raised-an-er
-    client = commands.Bot(command_prefix='.', intents=intents) # had to be changed to commands.Bot from discord.Bot
-    load(client)
-
-    # does the thing
-    client.run(data.key.token)
-
-if __name__ == "__main__":
-    # the machine wakes up
-    print('.                                                                              .')
-    print(' .&&&&*...........................&&&&&&&&&&..............................*&&&&.')
-    print('  ..&&&   #&&&&&&&&&&&&&&&&&&&&&&&%        &&&&&&&&&&&&&&&&&&&&&&&&&&&&/  &&&.. ')
-    print('   ..&&&&                       &     &     &&&&        &&              (&&&..  ')
-    print('    .%&&&&*          &&&&&&&&&.     &&&(    *&&&&      &&&&          &&&&#.     ')
-    print('       ..&&&              &&&                 &&&       &&&&     %&&&&..        ')
-    print('       ..&&/    &%   &&&/       &&&&&&&&&&&       &&         &%     &&..        ')
-    print('         .%&.      &&&&&&&&      &&&&&&&&,     &&&      &&&&&     ,&/.          ')
-    print('     ..&&      *&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&      *&&&..      ')
-    print('    .&&,&&&&&&&&&&&&##%&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&###&&&&&&&&&&*& &%.     ')
-    print('   .&&&&&&&&&&&&&&&&&&&######&&&&&&&&&&&&&&&&&&&&&######&&&&&&&&&&&&&&&&&&.     ')
-    print('    .,&&..&&&&&&  &&&&&&&&&&&#####&&&&&&&&&&%#####&&&&&&&&&&&  &&&&&&.(&&.      ')
-    print('       ..&&&&&(  &&&&...&&&&&&&&&&###&&&&%###&&&&&&&&&&...&&&&  %&&&&&..        ')
-    print('       .%&&&&& ,&&&&&..&&&&&  &&&&&&&&#&#&&&&&&&&  &&&&(.,&&&%&  &&&&&(.        ')
-    print('       ..&&&&&% &&&&&&&..&&&&&&&&..&&&&/&&&&..&&&&&&&&..&&&&&&& &&&&&&..        ')
-    print('        ..(&&&&&   &&&&&&&&&&&&&&&&&&&&/..&&&&&&&&&&&&&&&&&&   &&&&&*..         ')
-    print('           ..&&&&&&.    %&&&&&&&&&&&.&&/...&&&&&&&&&&&%    *&&&&&&..            ')
-    print('              ...*&&&&&&&         &&&.&/..(&&         &&&&&&&....               ')
-    print('                    .....&&&&&&&&&&&&&./.&&&&&&&&&&&&&.....                     ')
-    print('                             ........&&&........                                \n')
-    # print('<=[[LOGGING]]=>')
-    print('<<<<----------------------------<=[[LOGGING]]=>------------------------------->>>')
-    main()
+@client.tree.command()
+async def rat(interaction: discord.Interaction):
+    """Checks for that gosh darn rat!"""
+    datetimeFormat = '%Y-%m-%d %H:%M:%S'
+    date2 = '2019-11-18 12:25:34'
+    date1 = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    diff = datetime.datetime.strptime(date1, datetimeFormat) - datetime.datetime.strptime(date2, datetimeFormat)
+    await interaction.response.send_message(f"Hello  {interaction.user.mention}, No rats spotted in the caf as of today, if this changes DM Saito, time since " f"last seen {diff}")
+    
+                                            
