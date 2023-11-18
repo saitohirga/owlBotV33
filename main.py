@@ -15,6 +15,8 @@ class MyClient(commands.Bot):
         super().__init__(command_prefix="!", intents=intents)
 
     async def setup_hook(self):
+        # Add your cog here
+        self.add_cog(MyCog(self))
         # Sync the commands with the guild
         await self.tree.sync(guild=MY_GUILD)
 
