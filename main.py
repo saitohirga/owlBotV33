@@ -43,7 +43,7 @@ async def brid(interaction: discord.Interaction):
      """Checks for birds"""
      datetimeFormat = '%Y %m %d %H:%M:%S'
      date2 = '2021 10 20 7:44:36'
-     date1 = strftime("%Y %m %d %H:%M:%S", time.gmtime())
+     date1 = strftime("%Y %m %d %H:%M:%S", gmtime())
      diff = datetime.datetime.strptime(date1, datetimeFormat) - datetime.datetime.strptime(date2, datetimeFormat)
      await interaction.response.send_message(f"No bird spotted in the caf as of today, if this changes DM Saito, time since last seen {diff}")
 
