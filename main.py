@@ -50,10 +50,10 @@ async def bird(interaction: discord.Interaction):
 
 @client.tree.command()
 @app_commands.rename(text_to_send='text')
-@app_commands.describe(text_to_send='send')
+@app_commands.describe(text_to_send='reports on what our owl is thinking')
 @app_commands.default_permissions(manage_messages=True)
-async def owl(interaction: discord.Interaction, text_to_send: str):
-    """Sometimes sends a cute owl"""
+async def owlthought(interaction: discord.Interaction, text_to_send: str):
+    """reports what our owl is thinking"""
     await interaction.response.send_message(text_to_send)
 
 client.run(data.key.token)                                          
