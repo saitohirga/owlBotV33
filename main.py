@@ -50,9 +50,10 @@ async def bird(interaction: discord.Interaction):
 
 @client.tree.command()
 @app_commands.rename(text_to_send='text')
-@app_commands.describe(text_to_send='Text to send in the current channel')
-async def send(interaction: discord.Interaction, text_to_send: str):
-    """Sends the text into the current channel."""
-    await interaction.response.send_message(text_to_send)
+@app_commands.describe(text_to_send='send')
+@app_commands.default_permissions(manage_messages=True)
+async def owl(interaction: discord.Interaction, text_to_send: str):
+    """Sometimes sends a cute owl"""
+    await interaction.response.send_message(text_to_send, hidden=True)
 
 client.run(data.key.token)                                          
