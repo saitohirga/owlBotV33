@@ -47,4 +47,12 @@ async def bird(interaction: discord.Interaction):
      diff = datetime.datetime.strptime(date1, datetimeFormat) - datetime.datetime.strptime(date2, datetimeFormat)
      await interaction.response.send_message(f"Hello {interaction.user.mention}, No bird spotted in the caf as of today, if this changes DM Saito, time since last seen {diff}")
 
+@client.message()
+async def oof(message: discord.Message):
+    if message.content.lower().endswith(".rat"):
+        try:
+         await message.channel.send("nope, use /commands")
+        except:
+            pass     
+
 client.run(data.key.token)                                          
