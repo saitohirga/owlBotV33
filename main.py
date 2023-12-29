@@ -24,6 +24,7 @@ class MyClient(discord.Client):
 intents = discord.Intents.default()
 client = MyClient(intents=intents)
 
+
 @client.event
 async def on_ready():
     print(f'Logged in as {client.user} (ID: {client.user.id})')
@@ -47,12 +48,11 @@ async def bird(interaction: discord.Interaction):
      diff = datetime.datetime.strptime(date1, datetimeFormat) - datetime.datetime.strptime(date2, datetimeFormat)
      await interaction.response.send_message(f"Hello {interaction.user.mention}, No bird spotted in the caf as of today, if this changes DM Saito, time since last seen {diff}")
 
-@client.message()
-async def oof(message: discord.Message):
-    if message.content.lower().endswith(".rat"):
-        try:
-         await message.channel.send("nope, use /commands")
-        except:
-            pass     
+@client.tree.command()
+@app_commands.rename(text_to_send='text')
+@app_commands.describe(text_to_send='Text to send in the current channel')
+async def send(interaction: discord.Interaction, text_to_send: str):
+    """Sends the text into the current channel."""
+    await interaction.response.send_message(text_to_send)
 
 client.run(data.key.token)                                          
