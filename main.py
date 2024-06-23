@@ -5,10 +5,14 @@ from discord import app_commands
 from time import gmtime, strftime
 import datetime
 import data.key
+from discord.ext import commands
 
 
 MY_GUILD = discord.Object(id=458765854624972811)  # replace with your guild id
+intents = discord.Intents.default()
+intents.message_content = True
 
+bot = commands.Bot(command_prefix='.', intents=intents)
 
 class MyClient(discord.Client):
     def __init__(self, *, intents: discord.Intents):
@@ -55,5 +59,14 @@ async def bird(interaction: discord.Interaction):
 async def owlthought(interaction: discord.Interaction, text_to_send: str):
     """reports what our owl is thinking"""
     await interaction.response.send_message(text_to_send)
+
+@bot.command()
+async def rat(ctx, argr):
+    datetimeFormat = '%Y-%m-%d %H:%M:%S'
+    date2 = '2019-11-18 12:25:34'
+    date1 = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    diff = datetime.datetime.strptime(date1, datetimeFormat) - datetime.datetime.strptime(date2, datetimeFormat)
+    argr = f"Hello, you asked for this command really??, No rats spotted in the caf as of today, if this changes DM Saito, time since " f"last seen {diff}"
+    await ctx.send(argr)
 
 client.run(data.key.token)                                          
