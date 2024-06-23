@@ -1,4 +1,4 @@
-FROM 3.9.19-bookworm
+FROM python:3.9.19-bookworm
 
 COPY . /app
 WORKDIR /app
