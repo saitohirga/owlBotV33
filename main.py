@@ -63,10 +63,10 @@ async def owlthought(interaction: discord.Interaction, text_to_send: str):
 @bot.command()
 async def rat(ctx, argr):
     datetimeFormat = '%Y-%m-%d %H:%M:%S'
-    date2 = '2019-11-18 12:25:34'
-    date1 = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-    diff = datetime.datetime.strptime(date1, datetimeFormat) - datetime.datetime.strptime(date2, datetimeFormat)
-    argr = f"Hello, you asked for this command really??, No rats spotted in the caf as of today, if this changes DM Saito, time since " f"last seen {diff}"
+    date21 = '2019-11-18 12:25:34'
+    date11 = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+    difff = datetime.datetime.strptime(date11, datetimeFormat) - datetime.datetime.strptime(date21, datetimeFormat)
+    argr = f"Hello, you asked for this command really??, No rats spotted in the caf as of today, if this changes DM Saito, time since " f"last seen {difff}"
     await ctx.send(argr)
 
 client.run(data.key.token)                                          
