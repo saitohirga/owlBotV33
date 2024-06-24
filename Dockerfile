@@ -1,4 +1,4 @@
-FROM python:3.9.19-bookworm
+FROM gorialis/discord.py:3.11.2-bullseye-master-extras
 
 COPY . /app
 WORKDIR /app
