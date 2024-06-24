@@ -5,7 +5,7 @@ from discord import app_commands
 from time import gmtime, strftime
 import datetime
 import data.key
-
+import asyncio
 
 MY_GUILD = discord.Object(id=458765854624972811)  # replace with your guild id
 
@@ -36,7 +36,10 @@ async def rat(interaction: discord.Interaction):
     date2 = '2019-11-18 12:25:34'
     date1 = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     diff = datetime.datetime.strptime(date1, datetimeFormat) - datetime.datetime.strptime(date2, datetimeFormat)
-    await interaction.response.send_message(f"Hello {interaction.user.mention}, No rats spotted in the caf as of today, if this changes DM Saito, time since " f"last seen {diff}")   
+    msg = f"Hello {interaction.user.mention}, No rats spotted in the caf as of today, if this changes DM Saito, time since " f"last seen {diff}"
+    await discord.Interaction.response.defer(msg, ephemeral=True, thinking=True)
+    await asyncio.sleep(30)
+    await discord.Interaction.followup.send(msg)
 
 @client.tree.command()
 async def bird(interaction: discord.Interaction):
