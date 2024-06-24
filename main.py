@@ -9,10 +9,10 @@ from discord.ext import commands
 
 
 MY_GUILD = discord.Object(id=458765854624972811)  # replace with your guild id
-intents = discord.Intents.default()
-intents.message_content = True
+intentsb = discord.Intents.default()
+intentsb.message_content = True
 
-bot = commands.Bot(command_prefix='.', intents=intents)
+botb = commands.Bot(command_prefix='.', intents=intentsb)
 
 class MyClient(discord.Client):
     def __init__(self, *, intents: discord.Intents):
@@ -60,7 +60,7 @@ async def owlthought(interaction: discord.Interaction, text_to_send: str):
     """reports what our owl is thinking"""
     await interaction.response.send_message(text_to_send)
 
-@bot.command()
+@botb.command()
 async def rat(ctx, argr):
     datetimeFormat = '%Y-%m-%d %H:%M:%S'
     date21 = '2019-11-18 12:25:34'
