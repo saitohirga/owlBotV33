@@ -5,15 +5,9 @@ from discord import app_commands
 from time import gmtime, strftime
 import datetime
 import data.key
-from discord.ext import commands
-import asyncio
 
 
 MY_GUILD = discord.Object(id=458765854624972811)  # replace with your guild id
-intentsb = discord.Intents.default()
-intentsb.message_content = True
-
-botb = commands.Bot(command_prefix='.', intents=intentsb)
 
 class MyClient(discord.Client):
     def __init__(self, *, intents: discord.Intents):
@@ -42,9 +36,7 @@ async def rat(interaction: discord.Interaction):
     date2 = '2019-11-18 12:25:34'
     date1 = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     diff = datetime.datetime.strptime(date1, datetimeFormat) - datetime.datetime.strptime(date2, datetimeFormat)
-    await interaction.response.defer(ephemeral=True)
-    await asyncio.sleep(10)
-    await interaction.followup.send(f"Hello {interaction.user.mention}, No rats spotted in the caf as of today, if this changes DM Saito, time since " f"last seen {diff}")   
+    await interaction.response.send_message(f"Hello {interaction.user.mention}, No rats spotted in the caf as of today, if this changes DM Saito, time since " f"last seen {diff}")   
 
 @client.tree.command()
 async def bird(interaction: discord.Interaction):
@@ -62,14 +54,5 @@ async def bird(interaction: discord.Interaction):
 async def owlthought(interaction: discord.Interaction, text_to_send: str):
     """reports what our owl is thinking"""
     await interaction.response.send_message(text_to_send)
-
-@botb.command()
-async def rat(ctx, argr):
-    datetimeFormat = '%Y-%m-%d %H:%M:%S'
-    date21 = '2019-11-18 12:25:34'
-    date11 = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-    difff = datetime.datetime.strptime(date11, datetimeFormat) - datetime.datetime.strptime(date21, datetimeFormat)
-    argr = f"Hello, you asked for this command really??, No rats spotted in the caf as of today, if this changes DM Saito, time since " f"last seen {difff}"
-    await ctx.send(argr)
 
 client.run(data.key.token)                                          
