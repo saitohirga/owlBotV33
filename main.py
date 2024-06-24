@@ -37,9 +37,9 @@ async def rat(interaction: discord.Interaction):
     date1 = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     diff = datetime.datetime.strptime(date1, datetimeFormat) - datetime.datetime.strptime(date2, datetimeFormat)
     msg = f"Hello {interaction.user.mention}, No rats spotted in the caf as of today, if this changes DM Saito, time since " f"last seen {diff}"
-    await discord.Interaction.response.defer(msg, ephemeral=True, thinking=True)
+    await interaction.response.defer(msg, ephemeral=True, thinking=True)
     await asyncio.sleep(30)
-    await discord.Interaction.followup.send(msg)
+    await interaction.followup.send(msg)
 
 @client.tree.command()
 async def bird(interaction: discord.Interaction):
