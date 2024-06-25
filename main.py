@@ -34,7 +34,6 @@ async def rat(interaction: discord.Interaction):
     diff = datetime.datetime.strptime(date1, datetimeFormat) - datetime.datetime.strptime(date2, datetimeFormat)
     msg = f"Hello {interaction.user.mention}, No rats spotted in the caf as of today, if this changes DM Saito, time since last seen {diff}"
     await interaction.response.defer(thinking=True)
-    await asyncio.sleep(2)  # Use a shorter sleep for testing purposes
     await interaction.followup.send(msg)
 
 @client.tree.command()
