@@ -1,25 +1,31 @@
-FROM gorialis/discord.py:master-extras
+FROM ghcr.io/void-linux/void-musl-full
 
 COPY . /app
 WORKDIR /app
 
-ENV PYTHON_BIN python3
+ARG REPOSITORY=https://repo-fastly.voidlinux.org/current
+ARG PKGS="cairo libjpeg-turbo"
+ARG UID 1000
+ARG GID 1000
 
 RUN \
-    apt-get update && \
-    echo "**** install runtime packages ****" && \
-    apt-get install -y --no-install-recommends \
-        libxml2-dev \
-        libxslt1-dev \
-        && \
+    echo "**** update system ****" && \
+    xbps-install -Suy xbps -R ${REPOSITORY} && \
+    xbps-install -uy -R ${REPOSITORY} && \
+    echo "**** install system packages ****" && \
+    xbps-install -y -R ${REPOSITORY} ${PKGS} python3.11 && \
     echo "**** install pip packages ****" && \
-    pip3 install -U pip setuptools wheel && \
-    pip3 install -r requirements.txt && \
-    pip3 install discord --upgrade && \
+    python3.11 -m venv botenv && \
+    botenv/bin/pip install -U pip setuptools wheel && \
+    botenv/bin/pip install -r requirements.txt && \
     echo "**** clean up ****" && \
     rm -rf \
         /root/.cache \
         /tmp/* \
-        /var/lib/apt/lists/*
+        /var/cache/xbps/*
 
-CMD ["/bin/sh", "run.sh", "--pass-errors", "--no-botenv"]
+ENV PYTHONUNBUFFERED 1
+
+USER $UID:$GID
+
+CMD ["/bin/sh", "run.sh", "--pass-errors"]
