@@ -15,6 +15,7 @@ RUN \
     echo "**** install pip packages ****" && \
     pip3 install -U pip setuptools wheel && \
     pip3 install -r requirements.txt && \
+    pip3 install discord --upgrade && \
     echo "**** clean up ****" && \
     rm -rf \
         /root/.cache \
