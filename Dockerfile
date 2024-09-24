@@ -1,4 +1,4 @@
-FROM gorialis/discord.py:3.11.2-bullseye-master-extras
+FROM gorialis/discord.py:master-extras
 
 COPY . /app
 WORKDIR /app
