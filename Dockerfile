@@ -27,8 +27,8 @@ RUN \
         py3-pip \
         python3 && \
     echo "**** install pip packages ****" && \
-    pip3 install -U pip setuptools wheel && \
-    pip3 install -r requirements.txt && \
+    pip3 install -U pip setuptools wheel --break-system-packages && \
+    pip3 install -r requirements.txt --break-system-packages && \
     echo "**** clean up ****" && \
     apk del --purge \
         build-dependencies && \
