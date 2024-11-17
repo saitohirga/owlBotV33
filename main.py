@@ -116,6 +116,6 @@ async def ask_openai(interaction: discord.Interaction, question: str):
         answer = response["choices"][0]["message"]["content"]
         await interaction.response.send_message(f"🤖 {answer}")
     except Exception as e:
-        await interaction.response.send_message(f"⚠️ An error occurred: {str(e)}")   
+        await interaction.response.send_message(f"⚠️ An error occurred: {str(e)}")
 
 client.run(data.key.token)
