@@ -1,12 +1,13 @@
-from typing import Optional
 import discord
 from discord import app_commands
 from time import gmtime, strftime
 import datetime
 import data.key
-import asyncio
+import openai
 
 MY_GUILD = discord.Object(id=458765854624972811)  # Replace with your guild ID
+
+openai.api_key = data.key.openai_key
 
 class MyClient(discord.Client):
     def __init__(self, *, intents: discord.Intents):
@@ -98,5 +99,23 @@ async def toggle_listener(interaction: discord.Interaction):
     client.rat_listener_enabled = not client.rat_listener_enabled
     status = "enabled" if client.rat_listener_enabled else "disabled"
     await interaction.response.send_message(f"The .rat listener has been {status}.")
+
+@client.tree.command()
+@app_commands.default_permissions(manage_messages=True)
+@app_commands.describe(question="The question you want to ask OpenAI")
+async def ask_openai(interaction: discord.Interaction, question: str):
+    """Ask OpenAI a question"""
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant. Named Owsley's Freind, you are a mascot of the College florida atlantic university."},
+                {"role": "user", "content": question}
+            ]
+        )
+        answer = response["choices"][0]["message"]["content"]
+        await interaction.response.send_message(f"🤖 {answer}")
+    except Exception as e:
+        await interaction.response.send_message(f"⚠️ An error occurred: {str(e)}")   
 
 client.run(data.key.token)
