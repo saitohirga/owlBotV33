@@ -23,6 +23,15 @@ intents.messages = True  # Enable message intents
 intents.message_content = True  # Enable message content intents
 client = MyClient(intents=intents)
 
+def format_time_difference(diff: datetime.timedelta) -> str:
+    total_seconds = int(diff.total_seconds())
+    years, remainder = divmod(total_seconds, 31536000)  # 1 year = 31536000 seconds
+    months, remainder = divmod(remainder, 2592000)      # 1 month = 2592000 seconds
+    days, remainder = divmod(remainder, 86400)         # 1 day = 86400 seconds
+    hours, remainder = divmod(remainder, 3600)         # 1 hour = 3600 seconds
+    minutes, seconds = divmod(remainder, 60)
+    return f"{years} years, {months} months, {days} days, {hours} hours, {minutes} minutes, {seconds} seconds"
+
 @client.event
 async def on_ready():
     print(f'Logged in as {client.user} (ID: {client.user.id})')
@@ -38,14 +47,14 @@ async def on_message(message: discord.Message):
     if message.author.bot:
         return
 
-      # Trigger only if `.rat` is at the start of the message
+    # Trigger only if `.rat` is at the start of the message
     if message.content.strip().startswith(".rat"):
-     datetimeFormat = '%Y-%m-%d %H:%M:%S'
-     date2 = '2019-11-18 12:25:34'
-     date1 = strftime("%Y-%m-%d %H:%M:%S", gmtime())
-     diff = datetime.datetime.strptime(date1, datetimeFormat) - datetime.datetime.strptime(date2, datetimeFormat)
-     response = f"Hello {message.author.mention},  No rats spotted in the caf as of today, if this changes DM Saito, time since last seen {diff}"
-     await message.channel.send(response)
+        datetimeFormat = '%Y-%m-%d %H:%M:%S'
+        date2 = '2019-11-18 12:25:34'
+        date1 = strftime("%Y-%m-%d %H:%M:%S", gmtime())
+        diff = datetime.datetime.strptime(date1, datetimeFormat) - datetime.datetime.strptime(date2, datetimeFormat)
+        response = f"Hello {message.author.mention}, No rats spotted in the caf as of today. If this changes, DM Saito. Time since last seen: {format_time_difference(diff)}"
+        await message.channel.send(response)
 
 @client.tree.command()
 async def rat(interaction: discord.Interaction):
@@ -54,7 +63,7 @@ async def rat(interaction: discord.Interaction):
     date2 = '2019-11-18 12:25:34'
     date1 = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     diff = datetime.datetime.strptime(date1, datetimeFormat) - datetime.datetime.strptime(date2, datetimeFormat)
-    msg = f"Hello {interaction.user.mention}, No rats spotted in the caf as of today, if this changes DM Saito, time since last seen {diff}"
+    msg = f"Hello {interaction.user.mention}, No rats spotted in the caf as of today. If this changes, DM Saito. Time since last seen: {format_time_difference(diff)}"
     await interaction.response.defer(thinking=True)
     await interaction.followup.send(msg)
 
@@ -65,11 +74,13 @@ async def bird(interaction: discord.Interaction):
     date2 = '2021-10-20 07:44:36'
     date1 = strftime("%Y-%m-%d %H:%M:%S", gmtime())
     diff = datetime.datetime.strptime(date1, datetimeFormat) - datetime.datetime.strptime(date2, datetimeFormat)
-    await interaction.response.send_message(f"Hello {interaction.user.mention}, No bird spotted in the caf as of today, if this changes DM Saito, time since last seen {diff}")
+    await interaction.response.send_message(
+        f"Hello {interaction.user.mention}, No birds spotted in the caf as of today. If this changes, DM Saito. Time since last seen: {format_time_difference(diff)}"
+    )
 
 @client.tree.command()
 @app_commands.rename(text_to_send='text')
-@app_commands.describe(text_to_send='reports on what our owl is thinking')
+@app_commands.describe(text_to_send='Reports on what our owl is thinking')
 @app_commands.default_permissions(manage_messages=True)
 async def owlthought(interaction: discord.Interaction, text_to_send: str):
     """Reports what our owl is thinking"""
