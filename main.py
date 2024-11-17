@@ -36,6 +36,9 @@ def format_time_difference(diff: datetime.timedelta) -> str:
 async def on_ready():
     print(f'Logged in as {client.user} (ID: {client.user.id})')
     print('------')
+    # Set bot's activity status to "Watching FAU Discord"
+    activity = discord.Activity(type=discord.ActivityType.watching, name="FAU Discord")
+    await client.change_presence(status=discord.Status.online, activity=activity)
 
 @client.event
 async def on_message(message: discord.Message):
