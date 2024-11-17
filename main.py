@@ -41,10 +41,10 @@ async def on_message(message: discord.Message):
       # Trigger only if `.rat` is at the start of the message
     if message.content.strip().startswith(".rat"):
      datetimeFormat = '%Y-%m-%d %H:%M:%S'
-     date2 = '2021-10-20 07:44:36'
+     date2 = '2019-11-18 12:25:34'
      date1 = strftime("%Y-%m-%d %H:%M:%S", gmtime())
      diff = datetime.datetime.strptime(date1, datetimeFormat) - datetime.datetime.strptime(date2, datetimeFormat)
-     response = f"Hello {message.author.mention}, No bird spotted in the caf as of today, if this changes DM Saito, time since last seen {diff}"
+     response = f"Hello {message.author.mention},  No rats spotted in the caf as of today, if this changes DM Saito, time since last seen {diff}"
      await message.channel.send(response)
 
 @client.tree.command()
