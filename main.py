@@ -106,7 +106,7 @@ async def toggle_listener(interaction: discord.Interaction):
 async def ask_openai(interaction: discord.Interaction, question: str):
     """Ask OpenAI a question"""
     try:
-        response = openai.ChatCompletion.create(
+        response = openai.Chat.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant. Named Owsley's Friend, you are a mascot of the College Florida Atlantic University."},
@@ -114,10 +114,11 @@ async def ask_openai(interaction: discord.Interaction, question: str):
             ]
         )
         # Extract the assistant's message content
-        answer = response.choices[0].message["content"]
+        answer = response["choices"][0]["message"]["content"]
         await interaction.response.send_message(f"🤖 {answer}")
     except Exception as e:
         await interaction.response.send_message(f"⚠️ An error occurred: {str(e)}")
+
 
 
 client.run(data.key.token)
