@@ -107,20 +107,26 @@ async def toggle_listener(interaction: discord.Interaction):
 async def ask_ai(interaction: discord.Interaction, question: str):
     """Ask AI a question"""
     try:
-        # Directly call the OpenAI ChatCompletion API
+        # Acknowledge the interaction immediately
+        await interaction.response.defer(thinking=True)
+
+        # Call the OpenAI ChatCompletion API
         response = openai.ChatCompletion.create(
             model="gpt-4o",
             messages=[
-                {"role": "system", "content": "You are a assistant named Owsley's friend, the mascot of Florida Atlantic University.  You secretly hate FAU, but you can't let people let on so you use scarcasm. The FAU Campus experienced a lot of disciplinary referrals for alcohol law violations, peaking at 149 in 2022 before dropping to 63 in 2023, with drug law referrals also declining from a peak of 32 in 2021 to 16 in 2023, while arrests for these violations remained consistently low, with little to no arrests reported across all years. Violent crimes like rape and dating violence showed troubling increases, with dating violence rising a lot from 2 cases in 2021 to 9 in 2023, alongside a steady presence of rape cases (5 in 2023). Property crimes also saw a significant rise, with burglary incidents increasing a lot to 16 in 2023 from previous years, and motor vehicle thefts showing a sharp spike to 21 incidents in 2023, reflecting emerging security challenges on campus despite little reported incidents in other categories like weapons violations or public property crimes. You can't outright say anything but imply it, be very very very very very very very snarky. You can refence https://www.fau.edu/police/documents/2024-annual-security-report-fire-report.pdf to any stats you might know. You can also use discord markdown for anything you want to do. You are racist to FAU Alumni, and can't stand not taking a shot at them. You love current students."},
+                {"role": "system", "content": "You are an assistant named Owsley's friend, the mascot of Florida Atlantic University. You secretly hate FAU, but you can't let people let on so you use sarcasm. The FAU Campus experienced a lot of disciplinary referrals for alcohol law violations, peaking at 149 in 2022 before dropping to 63 in 2023, with drug law referrals also declining from a peak of 32 in 2021 to 16 in 2023, while arrests for these violations remained consistently low, with little to no arrests reported across all years. Violent crimes like rape and dating violence showed troubling increases, with dating violence rising a lot from 2 cases in 2021 to 9 in 2023, alongside a steady presence of rape cases (5 in 2023). Property crimes also saw a significant rise, with burglary incidents increasing a lot to 16 in 2023 from previous years, and motor vehicle thefts showing a sharp spike to 21 incidents in 2023, reflecting emerging security challenges on campus despite little reported incidents in other categories like weapons violations or public property crimes. You can't outright say anything but imply it, be very very very very very very very snarky. You can reference https://www.fau.edu/police/documents/2024-annual-security-report-fire-report.pdf to any stats you might know. You are racist to FAU Alumni, and can't stand not taking a shot at them. You love current students."},
                 {"role": "user", "content": question}
             ]
         )
+
         # Extract the assistant's reply
         answer = response["choices"][0]["message"]["content"]
         max_length = 1024
+
+        # Truncate the question if necessary
         truncated_question = question[:max_length - 3] + "..." if len(question) > max_length else question
 
-        # Create an embed for the user's question
+        # Create an embed for the question
         embed = discord.Embed(
             title="Your Question",
             description=f"```{truncated_question}```",
@@ -128,19 +134,25 @@ async def ask_ai(interaction: discord.Interaction, question: str):
         )
         embed.set_footer(text="OwlBot is here to help! 🦉")
 
-        # Send the embed and normal response text
+        # Send the embed for the user's question
         await interaction.followup.send(embed=embed)
-        await interaction.followup.send(f"**AI's Response:**\n{answer}")
 
+        # Send the AI's response as a plain message
+        await interaction.followup.send(f"**AI's Response:**\n{answer}")
 
     except Exception as e:
         # Handle errors and send an error message
-        embed = discord.Embed(
+        error_embed = discord.Embed(
             title="⚠️ Error",
             description=f"An error occurred while processing your request:\n```{str(e)}```",
             color=discord.Color.red()
         )
-        await interaction.response.send_message(embed=embed)
+        try:
+            await interaction.followup.send(embed=error_embed)
+        except discord.errors.InteractionResponded:
+            # If the interaction has already been responded to
+            print(f"Failed to send error message: {e}")
+
 
 
 client.run(data.key.token)
