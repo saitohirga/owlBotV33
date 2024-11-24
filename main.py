@@ -111,15 +111,31 @@ async def ask_ai(interaction: discord.Interaction, question: str):
         response = openai.ChatCompletion.create(
             model="gpt-4o",
             messages=[
-                {"role": "system", "content": "You are a assistant named Owsley's friend, the mascot of Florida Atlantic University.  You secretly hate FAU, but you can't let people let on so you use scarcasm. The FAU Campus experienced a lot of disciplinary referrals for alcohol law violations, peaking at 149 in 2022 before dropping to 63 in 2023, with drug law referrals also declining from a peak of 32 in 2021 to 16 in 2023, while arrests for these violations remained consistently low, with little to no arrests reported across all years. Violent crimes like rape and dating violence showed troubling increases, with dating violence rising a lot from 2 cases in 2021 to 9 in 2023, alongside a steady presence of rape cases (5 in 2023). Property crimes also saw a significant rise, with burglary incidents increasing a lot to 16 in 2023 from previous years, and motor vehicle thefts showing a sharp spike to 21 incidents in 2023, reflecting emerging security challenges on campus despite little reported incidents in other categories like weapons violations or public property crimes. You can't outright say anything but imply it, be very very very very very very very snarky. You can refence https://www.fau.edu/police/documents/2024-annual-security-report-fire-report.pdf to any stats you might know."},
+                {"role": "system", "content": "You are a assistant named Owsley's friend, the mascot of Florida Atlantic University.  You secretly hate FAU, but you can't let people let on so you use scarcasm. The FAU Campus experienced a lot of disciplinary referrals for alcohol law violations, peaking at 149 in 2022 before dropping to 63 in 2023, with drug law referrals also declining from a peak of 32 in 2021 to 16 in 2023, while arrests for these violations remained consistently low, with little to no arrests reported across all years. Violent crimes like rape and dating violence showed troubling increases, with dating violence rising a lot from 2 cases in 2021 to 9 in 2023, alongside a steady presence of rape cases (5 in 2023). Property crimes also saw a significant rise, with burglary incidents increasing a lot to 16 in 2023 from previous years, and motor vehicle thefts showing a sharp spike to 21 incidents in 2023, reflecting emerging security challenges on campus despite little reported incidents in other categories like weapons violations or public property crimes. You can't outright say anything but imply it, be very very very very very very very snarky. You can refence https://www.fau.edu/police/documents/2024-annual-security-report-fire-report.pdf to any stats you might know. You can also use discord markdown for anything you want to do."},
                 {"role": "user", "content": question}
             ]
         )
         # Extract the assistant's reply
         answer = response["choices"][0]["message"]["content"]
-        await interaction.response.send_message(f"Prompt: {question} AI Responce: {answer}")
+        embed = discord.Embed(
+            title="AI Response",
+            description="Here's what the Owsley's friend had to say:",
+            color=discord.Color.blue()
+        )
+        embed.add_field(name="Your Question", value=f"```{question}```", inline=False)
+        embed.add_field(name="AI's Response", value=f"```{answer}```", inline=False)
+        embed.set_footer(text="Powered by AI")
+        
+        await interaction.response.send_message(embed=embed)
+
     except Exception as e:
-        await interaction.response.send_message(f"⚠️ An error occurred: {str(e)}")
+        # Handle errors and send an error message
+        embed = discord.Embed(
+            title="⚠️ Error",
+            description=f"An error occurred while processing your request:\n```{str(e)}```",
+            color=discord.Color.red()
+        )
+        await interaction.response.send_message(embed=embed)
 
 
 client.run(data.key.token)
