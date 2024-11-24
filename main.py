@@ -123,7 +123,7 @@ async def ask_ai(interaction: discord.Interaction, question: str):
             color=discord.Color.blue()
         )
         embed.add_field(name="Your Question", value=f"```{question}```", inline=False)
-        embed.add_field(name="AI's Response", value=f"```{answer}```", inline=False)
+        embed.add_field(name="AI's Response", value=f"{answer}", inline=False)
         embed.set_footer(text="Powered by AI")
         
         await interaction.response.send_message(embed=embed)
