@@ -104,20 +104,20 @@ async def toggle_listener(interaction: discord.Interaction):
 @client.tree.command()
 @app_commands.default_permissions(manage_messages=True)
 @app_commands.describe(question="The question you want to ask OpenAI")
-async def ask_openai(interaction: discord.Interaction, question: str):
-    """Ask OpenAI a question"""
+async def ask_ai(interaction: discord.Interaction, question: str):
+    """Ask AI a question"""
     try:
         # Directly call the OpenAI ChatCompletion API
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a helpful assistant named Owsley's Friend, the mascot of Florida Atlantic University."},
+                {"role": "system", "content": "You are a helpful assistant named Owsley's friend, the mascot of Florida Atlantic University. Please act like this in your replies."},
                 {"role": "user", "content": question}
             ]
         )
         # Extract the assistant's reply
         answer = response["choices"][0]["message"]["content"]
-        await interaction.response.send_message(f"🤖 {answer}")
+        await interaction.response.send_message(f"AI: {answer}")
     except Exception as e:
         await interaction.response.send_message(f"⚠️ An error occurred: {str(e)}")
 
