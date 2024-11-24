@@ -117,7 +117,7 @@ async def ask_ai(interaction: discord.Interaction, question: str):
         )
         # Extract the assistant's reply
         answer = response["choices"][0]["message"]["content"]
-        await interaction.response.send_message(f"AI: {answer}")
+        await interaction.response.send_message(f"Prompt: {question} AI Responce: {answer}")
     except Exception as e:
         await interaction.response.send_message(f"⚠️ An error occurred: {str(e)}")
 
