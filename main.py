@@ -5,8 +5,10 @@ import datetime
 import data.key
 import openai
 
-MY_GUILD = discord.Object(id=458765854624972811)  # Replace with your guild ID
+# Replace with your guild ID
+MY_GUILD = discord.Object(id=458765854624972811)
 
+# Set OpenAI API key
 openai.api_key = data.key.openai_key
 
 class MyClient(discord.Client):
@@ -106,19 +108,16 @@ async def toggle_listener(interaction: discord.Interaction):
 async def ask_openai(interaction: discord.Interaction, question: str):
     """Ask OpenAI a question"""
     try:
-        response = openai.Chat.create(
+        response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
                 {"role": "system", "content": "You are a helpful assistant. Named Owsley's Friend, you are a mascot of the College Florida Atlantic University."},
                 {"role": "user", "content": question}
             ]
         )
-        # Extract the assistant's message content
         answer = response["choices"][0]["message"]["content"]
         await interaction.response.send_message(f"🤖 {answer}")
     except Exception as e:
         await interaction.response.send_message(f"⚠️ An error occurred: {str(e)}")
-
-
 
 client.run(data.key.token)
