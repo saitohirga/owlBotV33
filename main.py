@@ -117,16 +117,21 @@ async def ask_ai(interaction: discord.Interaction, question: str):
         )
         # Extract the assistant's reply
         answer = response["choices"][0]["message"]["content"]
+        max_length = 1024
+        truncated_question = question[:max_length - 3] + "..." if len(question) > max_length else question
+
+        # Create an embed for the user's question
         embed = discord.Embed(
-            title="AI Response",
-            description="Here's what the Owsley's friend had to say:",
+            title="Your Question",
+            description=f"```{truncated_question}```",
             color=discord.Color.blue()
         )
-        embed.add_field(name="Your Question", value=f"```{question}```", inline=False)
-        embed.add_field(name="AI's Response", value=f"{answer}", inline=False)
-        embed.set_footer(text="Powered by AI")
-        
-        await interaction.response.send_message(embed=embed)
+        embed.set_footer(text="OwlBot is here to help! 🦉")
+
+        # Send the embed and normal response text
+        await interaction.followup.send(embed=embed)
+        await interaction.followup.send(f"**AI's Response:**\n{answer}")
+
 
     except Exception as e:
         # Handle errors and send an error message
