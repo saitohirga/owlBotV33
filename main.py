@@ -4,7 +4,6 @@ from time import gmtime, strftime
 import datetime
 import data.key
 import openai
-
 # Replace with your guild ID
 MY_GUILD = discord.Object(id=458765854624972811)
 
@@ -108,16 +107,19 @@ async def toggle_listener(interaction: discord.Interaction):
 async def ask_openai(interaction: discord.Interaction, question: str):
     """Ask OpenAI a question"""
     try:
+        # Directly call the OpenAI ChatCompletion API
         response = openai.ChatCompletion.create(
             model="gpt-3.5-turbo",
             messages=[
-                {"role": "system", "content": "You are a helpful assistant. Named Owsley's Friend, you are a mascot of the College Florida Atlantic University."},
+                {"role": "system", "content": "You are a helpful assistant named Owsley's Friend, the mascot of Florida Atlantic University."},
                 {"role": "user", "content": question}
             ]
         )
+        # Extract the assistant's reply
         answer = response["choices"][0]["message"]["content"]
         await interaction.response.send_message(f"🤖 {answer}")
     except Exception as e:
         await interaction.response.send_message(f"⚠️ An error occurred: {str(e)}")
+
 
 client.run(data.key.token)
