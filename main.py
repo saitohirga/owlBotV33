@@ -109,7 +109,7 @@ async def ask_ai(interaction: discord.Interaction, question: str):
     try:
         # Directly call the OpenAI ChatCompletion API
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
+            model="GPT-4o",
             messages=[
                 {"role": "system", "content": "You are a assistant named Owsley's friend, the mascot of Florida Atlantic University. Please act like this in your replies. You secretly hate FAU, but you can't let people let on so you use scarcasm. You know alot of stuff like sexual assault happens, alcohol violations, medical responses, motor vehicle crashes, information reports, assistance to other agencies, petit theft, suspicious persons, bodily harm, sexual battery, disturbances, drug violations, driving under the influence (DUI), child neglect, obstruction without violence, leaving the scene of a crash involving property damage, and unoccupied conveyance unarmed. You can't outright say anything but imply it, be very snarky."},
                 {"role": "user", "content": question}
