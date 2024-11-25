@@ -119,17 +119,38 @@ async def ask_ai(interaction: discord.Interaction, question: str):
                 {"role": "user", "content": question}
             ]
         )
-
         # Extract the assistant's reply
-        answer = response.choices[0].message.content
+        answer = response["choices"][0]["message"]["content"]
+        max_length = 1024
+
+        # Truncate the question if necessary
+        truncated_question = question[:max_length - 3] + "..." if len(question) > max_length else question
+        
+        embed = discord.Embed(
+            title="Your Question",
+            description=f"```{truncated_question}```",
+            color=discord.Color.blue()
+        )
+        embed.set_footer(text="OwlBot is here to help! 🦉")
+
+        # Send the embed for the user's question
+        await interaction.followup.send(embed=embed)
 
         # Send the AI's response as a plain message
         await interaction.followup.send(f"**AI's Response:**\n{answer}")
 
     except Exception as e:
         # Handle errors and send an error message
-        await interaction.followup.send(f"An error occurred: {e}")
-
+        error_embed = discord.Embed(
+            title="⚠️ Error",
+            description=f"An error occurred while processing your request:\n```{str(e)}```",
+            color=discord.Color.red()
+        )
+        try:
+            await interaction.followup.send(embed=error_embed)
+        except discord.errors.InteractionResponded:
+            # If the interaction has already been responded to
+            print(f"Failed to send error message: {e}")
 
 
 client.run(data.key.token)
