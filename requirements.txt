@@ -1,2 +1,2 @@
 discord.py
-openai==0.28
+openai

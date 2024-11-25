@@ -11,7 +11,7 @@ FROM alpine:3.20.3
 COPY . /app
 WORKDIR /app
 
-ENV PYTHON_BIN python3
+ENV PYTHON_BIN=python3
 
 RUN \
     echo "**** install build packages ****" && \
