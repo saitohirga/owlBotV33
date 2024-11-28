@@ -183,12 +183,8 @@ async def confess(interaction: discord.Interaction, confession: str):
             description=confession,
             color=discord.Color.orange()
         )
-        embed.set_footer(text=f"Submitted by {interaction.user.id}")  # Hidden user ID for staff
-        approval_message = await approval_channel.send(embed=embed)
-
-        # Add reaction options for approval and rejection
-        await approval_message.add_reaction("✅")  # Approve
-        await approval_message.add_reaction("❌")  # Reject
+        embed.set_footer(text=f"Submitted by {interaction.user.id}")  # Store submitter ID in the footer
+        await approval_channel.send(embed=embed)
 
     except Exception as e:
         await interaction.response.send_message(
@@ -217,7 +213,7 @@ async def on_reaction_add(reaction, user):
 
     # Extract the submitter ID from the footer
     try:
-        submitter_id = int(confession_embed.footer.text.split()[-1])
+        submitter_id = int(confession_embed.footer.text.split()[-1])  # Parse the user ID
     except ValueError:
         print("Failed to parse submitter ID from the footer.")
         return
@@ -251,7 +247,7 @@ async def on_reaction_add(reaction, user):
             embed.color = discord.Color.green()
             embed.add_field(name="Status", value="✅ Approved", inline=True)
             embed.add_field(name="Approved by", value=user.mention, inline=True)
-            embed.add_field(name="Submitted by", value=submitter_mention, inline=False)
+            embed.set_footer(text=f"Submitted by {submitter_mention}")
             await reaction.message.edit(embed=embed)
 
         elif reaction.emoji == "❌":  # Rejected
@@ -260,7 +256,7 @@ async def on_reaction_add(reaction, user):
             embed.color = discord.Color.red()
             embed.add_field(name="Status", value="❌ Rejected", inline=True)
             embed.add_field(name="Rejected by", value=user.mention, inline=True)
-            embed.add_field(name="Submitted by", value=submitter_mention, inline=False)
+            embed.set_footer(text=f"Submitted by {submitter_mention}")
             await reaction.message.edit(embed=embed)
 
     except Exception as e:
