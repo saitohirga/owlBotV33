@@ -155,5 +155,78 @@ async def ask_ai(interaction: discord.Interaction, question: str):
             # If the interaction has already been responded to
             print(f"Failed to send error message: {e}")
 
+APPROVAL_CHANNEL_ID = 882766317080436776  # Replace with the ID of your approval channel
+CONFESSIONS_CHANNEL_ID = 1311410381918437396  # Replace with the ID of your confessions channel
+
+@client.tree.command()
+@app_commands.describe(confession="Your confession text.")
+async def confess(interaction: discord.Interaction, confession: str):
+    """Submit an anonymous confession."""
+    try:
+        # Fetch the approval channel
+        approval_channel = client.get_channel(APPROVAL_CHANNEL_ID)
+
+        if not approval_channel:
+            await interaction.response.send_message(
+                "Approval channel not found. Please contact the admin.", ephemeral=True
+            )
+            return
+
+        # Acknowledge the interaction
+        await interaction.response.send_message(
+            "Your confession has been submitted for review!", ephemeral=True
+        )
+
+        # Send the confession to the approval channel
+        embed = discord.Embed(
+            title="New Confession Submitted",
+            description=confession,
+            color=discord.Color.orange()
+        )
+        embed.set_footer(text=f"Submitted by {interaction.user.id}")  # Hidden user ID for staff
+        approval_message = await approval_channel.send(embed=embed)
+
+        # Add reaction options for approval and rejection
+        await approval_message.add_reaction("✅")  # Approve
+        await approval_message.add_reaction("❌")  # Reject
+
+    except Exception as e:
+        await interaction.response.send_message(
+            f"An error occurred while submitting your confession: {str(e)}", ephemeral=True
+        )
+
+@client.event
+async def on_reaction_add(reaction, user):
+    """Handles staff reactions for confession approval or rejection."""
+    if reaction.message.channel.id != APPROVAL_CHANNEL_ID:
+        return
+
+    # Ignore reactions from bots
+    if user.bot:
+        return
+
+    # Ensure only staff can approve/reject confessions
+    if not user.guild_permissions.manage_messages:
+        return
+
+    # Get the confession embed
+    confession_embed = reaction.message.embeds[0]
+
+    if reaction.emoji == "✅":  # Approved
+        # Fetch the confessions channel
+        confessions_channel = client.get_channel(CONFESSIONS_CHANNEL_ID)
+        if confessions_channel:
+            await confessions_channel.send(
+                embed=discord.Embed(
+                    title="Anonymous Confession",
+                    description=confession_embed.description,
+                    color=discord.Color.green()
+                )
+            )
+        await reaction.message.delete()  # Remove the message from the approval channel
+
+    elif reaction.emoji == "❌":  # Rejected
+        await reaction.message.delete()  # Remove rejected message from the approval channel
+
 
 client.run(data.key.token)
