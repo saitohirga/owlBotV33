@@ -251,7 +251,7 @@ async def on_reaction_add(reaction, user):
             embed.color = discord.Color.green()
             embed.add_field(name="Status", value="✅ Approved", inline=True)
             embed.add_field(name="Approved by", value=user.mention, inline=True)
-            embed.set_footer(text=f"Submitted by {submitter_mention}")
+            embed.add_field(name="Submitted by", value=submitter_mention, inline=False)
             await reaction.message.edit(embed=embed)
 
         elif reaction.emoji == "❌":  # Rejected
@@ -260,13 +260,10 @@ async def on_reaction_add(reaction, user):
             embed.color = discord.Color.red()
             embed.add_field(name="Status", value="❌ Rejected", inline=True)
             embed.add_field(name="Rejected by", value=user.mention, inline=True)
-            embed.set_footer(text=f"Submitted by {submitter_mention}")
+            embed.add_field(name="Submitted by", value=submitter_mention, inline=False)
             await reaction.message.edit(embed=embed)
 
     except Exception as e:
         print(f"Failed to process reaction: {str(e)}")
-
-
-
 
 client.run(data.key.token)
