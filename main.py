@@ -212,10 +212,20 @@ async def on_reaction_add(reaction, user):
     # Get the confession embed
     confession_embed = reaction.message.embeds[0]
 
-    if reaction.emoji == "✅":  # Approved
-        # Fetch the confessions channel
-        confessions_channel = client.get_channel(CONFESSIONS_CHANNEL_ID)
-        if confessions_channel:
+    confessions_channel = client.get_channel(CONFESSIONS_CHANNEL_ID)
+    if confessions_channel is None:
+        print(f"Confessions channel not found. ID: {CONFESSIONS_CHANNEL_ID}")
+        return
+
+    # Check bot permissions for the confessions channel
+    bot_member = reaction.message.guild.me
+    if not confessions_channel.permissions_for(bot_member).send_messages:
+        print(f"Bot lacks permissions to send messages in the channel: {confessions_channel.name}")
+        return
+
+    try:
+        if reaction.emoji == "✅":  # Approved
+            # Post the confession to the public confessions channel
             await confessions_channel.send(
                 embed=discord.Embed(
                     title="Anonymous Confession",
@@ -223,10 +233,27 @@ async def on_reaction_add(reaction, user):
                     color=discord.Color.green()
                 )
             )
-        await reaction.message.delete()  # Remove the message from the approval channel
 
-    elif reaction.emoji == "❌":  # Rejected
-        await reaction.message.delete()  # Remove rejected message from the approval channel
+            # Edit the original message in the approval channel
+            embed = confession_embed.copy()
+            embed.color = discord.Color.green()
+            embed.add_field(name="Status", value="✅ Approved", inline=True)
+            embed.add_field(name="Approved by", value=user.mention, inline=True)
+            embed.set_footer(text=f"Action taken on {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            await reaction.message.edit(embed=embed)
+
+        elif reaction.emoji == "❌":  # Rejected
+            # Edit the original message in the approval channel
+            embed = confession_embed.copy()
+            embed.color = discord.Color.red()
+            embed.add_field(name="Status", value="❌ Rejected", inline=True)
+            embed.add_field(name="Rejected by", value=user.mention, inline=True)
+            embed.set_footer(text=f"Action taken on {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            await reaction.message.edit(embed=embed)
+
+    except Exception as e:
+        print(f"Failed to process reaction: {str(e)}")
+
 
 
 client.run(data.key.token)
