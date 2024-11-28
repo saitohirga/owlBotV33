@@ -211,6 +211,18 @@ async def on_reaction_add(reaction, user):
 
     # Get the confession embed
     confession_embed = reaction.message.embeds[0]
+    if not confession_embed.footer.text:
+        print("No submitter information in the embed footer.")
+        return
+
+    # Extract the submitter ID from the footer
+    try:
+        submitter_id = int(confession_embed.footer.text.split()[-1])
+    except ValueError:
+        print("Failed to parse submitter ID from the footer.")
+        return
+
+    submitter_mention = f"<@{submitter_id}>"
 
     confessions_channel = client.get_channel(CONFESSIONS_CHANNEL_ID)
     if confessions_channel is None:
@@ -239,7 +251,7 @@ async def on_reaction_add(reaction, user):
             embed.color = discord.Color.green()
             embed.add_field(name="Status", value="✅ Approved", inline=True)
             embed.add_field(name="Approved by", value=user.mention, inline=True)
-            embed.set_footer(text=f"Action taken on {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            embed.set_footer(text=f"Submitted by {submitter_mention}")
             await reaction.message.edit(embed=embed)
 
         elif reaction.emoji == "❌":  # Rejected
@@ -248,11 +260,12 @@ async def on_reaction_add(reaction, user):
             embed.color = discord.Color.red()
             embed.add_field(name="Status", value="❌ Rejected", inline=True)
             embed.add_field(name="Rejected by", value=user.mention, inline=True)
-            embed.set_footer(text=f"Action taken on {datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+            embed.set_footer(text=f"Submitted by {submitter_mention}")
             await reaction.message.edit(embed=embed)
 
     except Exception as e:
         print(f"Failed to process reaction: {str(e)}")
+
 
 
 
