@@ -222,7 +222,10 @@ async def on_reaction_add(reaction, user):
         print("Failed to parse submitter ID from the footer.")
         return
 
-    submitter_mention = f"<@{submitter_id}>"
+    submitter = await client.fetch_user(submitter_id)  # Fetch the user by their ID
+    if submitter is None:
+        print(f"User not found for ID: {submitter_id}")
+        return
 
     confessions_channel = client.get_channel(CONFESSIONS_CHANNEL_ID)
     if confessions_channel is None:
@@ -251,16 +254,21 @@ async def on_reaction_add(reaction, user):
             embed.color = discord.Color.green()
             embed.add_field(name="Status", value="✅ Approved", inline=True)
             embed.add_field(name="Approved by", value=user.mention, inline=True)
-            embed.add_field(name="Submitted by", value=submitter_mention, inline=False)
+            embed.add_field(name="Submitted by", value=f"<@{submitter_id}>", inline=False)
             await reaction.message.edit(embed=embed)
 
         elif reaction.emoji == "❌":  # Rejected
+            # Notify the submitter via DM
+            await submitter.send(
+                "Your anonymous confession was reviewed by staff and has been denied."
+            )
+
             # Edit the original message in the approval channel
             embed = confession_embed.copy()
             embed.color = discord.Color.red()
             embed.add_field(name="Status", value="❌ Rejected", inline=True)
             embed.add_field(name="Rejected by", value=user.mention, inline=True)
-            embed.add_field(name="Submitted by", value=submitter_mention, inline=False)
+            embed.add_field(name="Submitted by", value=f"<@{submitter_id}>", inline=False)
             await reaction.message.edit(embed=embed)
 
     except Exception as e:
