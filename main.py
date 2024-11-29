@@ -92,7 +92,8 @@ async def bird(interaction: discord.Interaction):
 @app_commands.default_permissions(manage_messages=True)
 async def owlthought(interaction: discord.Interaction, text_to_send: str):
     """Reports what our owl is thinking"""
-    await interaction.response.send_message(text_to_send)
+    await interaction.response.defer()  # Acknowledge the interaction to avoid timeout
+    await interaction.channel.send(text_to_send)
 
 @client.tree.command()
 @app_commands.default_permissions(manage_messages=True)
